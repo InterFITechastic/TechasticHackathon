@@ -54,6 +54,7 @@ public class spider
         }
         catch(IOException ioe)
         {
+        	ioe.printStackTrace();
             // We were not successful in our HTTP request
             return false;
         }
