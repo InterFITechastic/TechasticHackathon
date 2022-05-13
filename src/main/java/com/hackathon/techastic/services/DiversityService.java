@@ -9,7 +9,7 @@ import com.hackathon.techastic.to.UserDetails;
 import com.hackathon.techastic.util.TechasticUtil;
 
 @Service
-public class DiversitySerice {
+public class DiversityService {
 
 
 public void findDiversity(UserDetails user) throws Exception {

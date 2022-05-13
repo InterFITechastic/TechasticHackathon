@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.hackathon.techastic.services.DiversitySerice;
+import com.hackathon.techastic.services.DiversityService;
 import com.hackathon.techastic.services.ExcelService;
 import com.hackathon.techastic.to.UserDetails;
 
@@ -20,7 +20,7 @@ public class TechasticController {
 	private ExcelService excelService;
 	
 	@Autowired
-	private DiversitySerice diversityService;
+	private DiversityService diversityService;
 	
 	@GetMapping("/")
 	public String performSearchAndDecideDiversity(HttpServletRequest request, HttpServletResponse response) {
