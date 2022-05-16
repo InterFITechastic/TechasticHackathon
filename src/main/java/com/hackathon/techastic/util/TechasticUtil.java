@@ -47,17 +47,59 @@ public class TechasticUtil {
 		return user;
 	}
 	
-	public static List<String> searchGoogle(UserDetails user) throws UnsupportedEncodingException {
-		String searchURL = GOOGLE_SEARCH_URL + "?q="+URLEncoder.encode(user.getDunsName(), "utf-8")  ;
+	public static void searchGoogle(UserDetails user) throws UnsupportedEncodingException {
+		String searchURL = GOOGLE_SEARCH_URL + "?q="+URLEncoder.encode(user.getDunsName()+" Linkedin" , "utf-8")  ;
+				
+				
+				//"https://ch.linkedin.com/company/"+URLEncoder.encode(user.getDunsName(), "utf-8")+"?original_referer=";
+				//GOOGLE_SEARCH_URL + "?q="+URLEncoder.encode(user.getDunsName()+" Linkedin" , "utf-8")  ; ////"https://www.linkedin.com/company/"+URLEncoder.encode(user.getDunsName() , "utf-8");
+				
+				//
 		//without proper User-Agent, we will get 403 error
 		Document htmlDocument = null;
 		try {
 			htmlDocument = getHtmlDocument(searchURL);
+			
+			String linkedInCompanyLink = readLinkedInProfileOfCompany(htmlDocument);
+			
+			/*Elements linkedinElements = htmlDocument.getAllElements();
+			
+			for(Element element : linkedinElements) {
+				System.out.println(":: element :: "+ element.text());
+				if(element.text().contains("Website")) {
+					System.out.println("-----------website found----------");
+				}
+			}
+			
+			*/
+			//Document linkedInDocument = getHtmlDocument(linkedInCompanyLink);
+			
+			
+			//repository.getElementsByClass("repo-item-title").text();
+
+			
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return readHrefLinksFromSite(htmlDocument);
+		
+	}
+	
+	
+	private static String readLinkedInProfileOfCompany(Document htmlDocument) throws UnsupportedEncodingException{
+		Elements results = htmlDocument.select("a[href]");
+		String companyName = "";
+		for(Element result: results) {
+			if(result.absUrl("href").startsWith("https://www.linkedin.com/company/")) {
+				companyName = result.absUrl("href");
+				companyName = companyName.replace("linkedin", "ch.linkedin");
+				System.out.println("companyName : "+companyName);
+				System.out.println(result.absUrl("href"));
+			}
+			break;
+		}
+		return companyName;
 	}
 	
 	

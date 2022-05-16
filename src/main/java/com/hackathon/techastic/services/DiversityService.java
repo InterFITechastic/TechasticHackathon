@@ -26,12 +26,13 @@ public void findDiversity(UserDetails user) throws Exception {
 	}
 	
 	public void checkPublicData(UserDetails user) throws Exception {
-		List<String> linksFromGoogle = TechasticUtil.searchGoogle(user);
+		//List<String> linksFromGoogle = 
+				TechasticUtil.searchGoogle(user);
 		//for(String url : linksFromGoogle) {
-			String ownerContainedText = TechasticUtil.searchSiteForKeyWord(linksFromGoogle.get(0), "cfo");
-			if(ownerContainedText != null) {
-				System.out.println("============Diversified====================="+ ownerContainedText);
-			}
+			//String ownerContainedText = TechasticUtil.searchSiteForKeyWord(linksFromGoogle.get(0), "cfo");
+			//if(ownerContainedText != null) {
+			//	System.out.println("============Diversified====================="+ ownerContainedText);
+			//}
 		//}
 	}
 	
