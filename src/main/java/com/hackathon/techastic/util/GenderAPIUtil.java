@@ -12,12 +12,10 @@ import com.google.gson.JsonObject;
 
 public class GenderAPIUtil {
 
-	public static void main(String args[]) {
+	public static String getGender(String name) {
 		String gender = null;
 		try {
-
-			//String myKey = "insert your server key here";
-			URL url = new URL("https://gender-api.com/get?key=VZSH4HP7sfqYAEep8MvAmz42NjwDzswTfACw&name=" + URLEncoder.encode("komala", "utf-8"));
+			URL url = new URL("https://gender-api.com/get?key=VZSH4HP7sfqYAEep8MvAmz42NjwDzswTfACw&name=" + URLEncoder.encode(name, "utf-8"));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
 			if (conn.getResponseCode() != 200) {
@@ -33,20 +31,9 @@ public class GenderAPIUtil {
 			System.out.println("Gender: " + gender); // Gender: male
 			conn.disconnect();
 			
-			
-			//
-			
-			
-			/*URL url1 = new URL("https://v2.namsor.com/NamSorAPIv2/api2/json/country/Marie%20Curie");
-			HttpURLConnection conn1 = (HttpURLConnection) url.openConnection();
-
-			HttpResponse<String> response = Unirest.get("https://v2.namsor.com/NamSorAPIv2/api2/json/country/Marie%20Curie")
-					  .header("Accept", "application/json")
-					  .header("X-API-KEY", "your-api-key")
-					  .asString();
-*/
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return gender;
 	}
 }

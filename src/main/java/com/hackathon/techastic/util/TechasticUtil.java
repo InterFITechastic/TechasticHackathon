@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,14 +23,11 @@ public class TechasticUtil {
 	public static final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
 	public static final String USER_AGENT =
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/535.1";
-	public static List<String> diversityKeys = Arrays.asList(new String[] {"Black", "Africal American", "Hispanic","Latino",
-			"Asian","Pacific","Indian","LGBTQIA+","Veteran"});
-
+	
 	public static UserDetails getUserDetail(Row row) {
 		UserDetails user = new UserDetails();
 		
 		Iterator<Cell> cellIterator = row.cellIterator(); 
-		//while (cellIterator.hasNext()) {
 				user.setDunsNum(cellIterator.next().getNumericCellValue());
 				user.setDunsName(cellIterator.next().getStringCellValue());
 				user.setCounty(cellIterator.next().getStringCellValue());
@@ -42,48 +38,34 @@ public class TechasticUtil {
 				user.setPhone(cellIterator.next().getNumericCellValue());
 				user.setExecutiveContact1(cellIterator.next().getStringCellValue());
 				user.setExecutiveContact2(cellIterator.next().getStringCellValue());
-		//}
-		System.out.println("User: "+user);
 		return user;
 	}
 	
 	public static void searchGoogle(UserDetails user) throws UnsupportedEncodingException {
 		String searchURL = GOOGLE_SEARCH_URL + "?q="+URLEncoder.encode(user.getDunsName()+" Linkedin" , "utf-8")  ;
-				
-				
-				//"https://ch.linkedin.com/company/"+URLEncoder.encode(user.getDunsName(), "utf-8")+"?original_referer=";
-				//GOOGLE_SEARCH_URL + "?q="+URLEncoder.encode(user.getDunsName()+" Linkedin" , "utf-8")  ; ////"https://www.linkedin.com/company/"+URLEncoder.encode(user.getDunsName() , "utf-8");
-				
-				//
-		//without proper User-Agent, we will get 403 error
+		
 		Document htmlDocument = null;
 		try {
 			htmlDocument = getHtmlDocument(searchURL);
-			
 			String linkedInCompanyLink = readLinkedInProfileOfCompany(htmlDocument);
 			
-			/*Elements linkedinElements = htmlDocument.getAllElements();
+			Document linkedInHtmlDocument = getHtmlDocument(linkedInCompanyLink);
+			Elements linkedinElements = linkedInHtmlDocument.getAllElements();
 			
 			for(Element element : linkedinElements) {
-				System.out.println(":: element :: "+ element.text());
 				if(element.text().contains("Website")) {
-					System.out.println("-----------website found----------");
+					
+					/**
+					 * find the company's official website and navigate to all the href links that can be feched from the htmlDocument of the company website
+					 * and can search for executive names 1 and 2, once the hyperlink is idetified, same one can be used to fetch
+					 * other leaders and owners of the company and then can make user of Gender and Nationality APIs.
+					 */
 				}
 			}
-			
-			*/
-			//Document linkedInDocument = getHtmlDocument(linkedInCompanyLink);
-			
-			
-			//repository.getElementsByClass("repo-item-title").text();
-
-			
-			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	
@@ -93,9 +75,6 @@ public class TechasticUtil {
 		for(Element result: results) {
 			if(result.absUrl("href").startsWith("https://www.linkedin.com/company/")) {
 				companyName = result.absUrl("href");
-				companyName = companyName.replace("linkedin", "ch.linkedin");
-				System.out.println("companyName : "+companyName);
-				System.out.println(result.absUrl("href"));
 			}
 			break;
 		}
@@ -108,18 +87,14 @@ public class TechasticUtil {
 		Elements results = htmlDocument.select("a[href]");
 
 		for (Element link : results) {
-			String url = link.absUrl("href").toLowerCase(); // Google returns URLs in format "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
+			String url = link.absUrl("href").toLowerCase();
 			if(url.indexOf('=') != -1 && url.indexOf('&') != -1)
 				url = URLDecoder.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')), "UTF-8");
 		    
 		    if (!url.startsWith("http")) {
-		        continue; // Ads/news/etc.
+		        continue;
 		    }
-		    
-		    /*
-		     * url.contains("facebook") || url.contains("twitter") || url.contains(user.getDunsName()) || url.contains(user.getStreetAddress()) ||
-		    		title.contains(user.getDunsName()) || title.contains(user.getStreetAddress())
-		     */
+		   
 		    if(!url.contains("google")){
 		    	String title = link.text();
 			    System.out.println("Title: " +title );
@@ -150,7 +125,7 @@ public class TechasticUtil {
 				System.out.println("***subLink*****" + subLink);
 				htmlDocument = getHtmlDocument(subLink);
 				if (htmlDocument.text().toLowerCase().contains(keyWord)) {
-					System.out.println("============Diversified=====================" + htmlDocument.text());
+					//keyWord is found
 				}
 			}
 		}

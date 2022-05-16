@@ -6,14 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.hackathon.techastic.services.DiversityService;
 import com.hackathon.techastic.services.ExcelService;
 import com.hackathon.techastic.to.UserDetails;
 
-@Controller
+@RestController
 public class TechasticController {
 
 	@Autowired
@@ -22,20 +22,19 @@ public class TechasticController {
 	@Autowired
 	private DiversityService diversityService;
 	
-	@GetMapping("/")
-	public String performSearchAndDecideDiversity(HttpServletRequest request, HttpServletResponse response) {
+	@GetMapping("/diversity")
+	public List<UserDetails> performSearchAndDecideDiversity(HttpServletRequest request, HttpServletResponse response) {
+		List<UserDetails> details = null;
 		try {
-		List<UserDetails> details = excelService.getData();
-		//for(UserDetails user : details) {
-			diversityService.findDiversity(details.get(0));
-		//}
-		
+			details = excelService.readUserDetails();
+			for (UserDetails user : details) {
+				diversityService.findDiversity(user);
+			}
 			excelService.saveDiversityData(details);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.getStackTrace();
 		}
-		
-		
-		return "Action Performed";
+
+		return details;
 	}
 }
