@@ -21,9 +21,9 @@ public class FindNationalityUtil {
         String nationality = null;
         try {
 
-            URL url = new URL("https://ono.4b.rs/v1/nat?key=0ab808d14ef8450da38af5f7f32c59e0&fn="
-                    + URLEncoder.encode(name, StandardCharsets.UTF_8)
-                    + URLEncoder.encode("Sanguino", StandardCharsets.UTF_8));
+            URL url = new URL("http://localhost:8080/");//"https://ono.4b.rs/v1/nat?key=0ab808d14ef8450da38af5f7f32c59e0&fn="
+                    //+ URLEncoder.encode(name, StandardCharsets.UTF_8)
+                    //+ URLEncoder.encode("Sanguino", StandardCharsets.UTF_8));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             if (conn.getResponseCode() != 200) {
