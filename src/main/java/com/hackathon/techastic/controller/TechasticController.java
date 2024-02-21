@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,10 @@ public class TechasticController {
 	
 	@Autowired
 	private DiversityService diversityService;
+
+	
+	@Value("${my.secret}")
+	String keyV;
 	
 	@GetMapping("/diversity")
 	public List<UserDetails> performSearchAndDecideDiversity(HttpServletRequest request, HttpServletResponse response) {
@@ -36,5 +41,10 @@ public class TechasticController {
 		}
 
 		return details;
+	}
+
+	@GetMapping("/getAzurekeyvault")
+	public String getMyKeyValut(){
+		return keyV;
 	}
 }
